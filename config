@@ -1,0 +1,28 @@
+[Mail]
+#邮箱服务
+webaddr = smtp.126.com
+port = 25
+#发送邮箱
+SendEmail = xxxxxxx@126.com
+#接收邮箱地址
+RecvEmail = xxxxxxx@qq.com
+
+[contants]
+#双色球注数
+bets = 4
+#默认单注兑奖
+SingleMulti = false
+#读取配置文件时间分钟
+interval = 10
+#爬取信息网址
+webspider = http://www.17500.cn/ssq/details.php?issue=
+
+#单注双色球信息
+[single-lottery]
+keyLot = 6 15 26 31 32 33 16
+
+#多注双色球信息
+[multi-lottery]
+keyLot = 04 13 19 20 26 29 16
+keyLot = 04 13 19 31 32 33 10
+keyLot = 04 08 15 31 26 33 01
