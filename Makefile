@@ -1,4 +1,3 @@
-
 CC = gcc
 CXX = g++
 CFLAGS = -g -DMAP 
@@ -22,4 +21,3 @@ $(TARGET) : $(OBJS)
 clean :
 		rm -f $(TARGET)
 		find ./ -name "*.o" -exec rm -rf {} \;
-
