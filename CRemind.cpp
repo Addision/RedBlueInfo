@@ -89,6 +89,7 @@ void CRemind::timeProc(int signo, siginfo_t* info, void* context)
 	std::string page = spider.downLoad();
 	spider.parseHtml(page);
 	std::string redBlue = spider.getRedBlue();
+	//std::cout << redBlue << "\n";
 	if(redBlue.empty())
 	{
 		LogPrint->Info("crawling lottery information Err");
@@ -142,7 +143,6 @@ void CRemind::timeProc(int signo, siginfo_t* info, void* context)
 	LogPrint->Info("start send email");
 	CSendEmail::getInstance()->SendEmail(strLotInfo);
 	LogPrint->Info("end send ");
-
 }
 
 

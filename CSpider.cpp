@@ -39,10 +39,12 @@ int g2u(char *inbuf,size_t inlen,char *outbuf,size_t outlen)
 	return code_convert("gb2312","utf-8",inbuf,inlen,outbuf,outlen);  
 }  
 
-size_t write_data(char* ptr, size_t size, size_t nmemb, std::string& stream)
+size_t write_data(char* ptr, size_t size, size_t nmemb, std::string* stream)
 {
+	if(stream == NULL)
+		return 0;
 	unsigned int sizes = size*nmemb;
-	stream.append(ptr, sizes);
+	stream->append(ptr, sizes);
 	return sizes;
 }
 
@@ -80,8 +82,9 @@ std::string CSpider::Cycles()
 		cycles = cycles * 3 - 3;
 		break;
 	case 0:
-	case 1:
 		cycles = cycles * 3 - 2;
+	case 1:
+		cycles = (cycles-1) * 3 - 2; //上一周开奖结果
 		break;	   
 	default:
 		LogPrint->Error("get cycles error");
@@ -102,7 +105,8 @@ std::string CSpider::getCycles()
 
 std::string CSpider::downLoad()
 {
-	std::string pagebuf = "";
+	std::string pagebuf;
+	
 	char url[200];
 	memset(url, '\0', sizeof(url));
 	strcpy(url, "");
@@ -115,7 +119,7 @@ std::string CSpider::downLoad()
 	curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 60);
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, pagebuf);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &pagebuf);
     if((res = curl_easy_perform(curl)) == CURLE_OK)
 	{
 		LogPrint->Info("download page ok");
@@ -164,6 +168,7 @@ void CSpider::parseHtml(std::string& strHtml)
 			it->parseAttributes();
 			std::string str = it.node->first_child->data;
 			redblue += str;
+			//std::cout << redblue << "\n";
 		}
 
 		if(it->text().compare("<TD align=middle height=18 width=\"33%\">") == 0)
@@ -224,6 +229,7 @@ bool CSpider::writeFile()
 	{
 		out<<this->getCycles()<< " "<<this->getRedBlue() << "\n";
 	}
+	out.flush();
 	out.close();
 }
 
